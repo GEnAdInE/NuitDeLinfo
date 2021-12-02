@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
-    <button class="button__primary navbar__button">Créer un compte</button>
-    <button class="button__primary navbar__button">Se connecter</button>
+    <a href="/register" class="button__primary navbar__button">Créer un compte</a>
+    <a href="/login" class="button__primary navbar__button">Se connecter</a>
   </div>
 </template>
 
@@ -47,6 +47,7 @@ export default class Navbar extends Vue {
 // -----------------------------------------------------------------------------------------------
 .navbar {
   position: fixed;
+  top: 0;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -56,7 +57,7 @@ export default class Navbar extends Vue {
 }
 .navbar__button {
   margin-block: 1rem;
-  font-weight: bolder;
+  font-weight: 400;
   color: white;
   &:last-of-type {
     margin-right: 1rem;

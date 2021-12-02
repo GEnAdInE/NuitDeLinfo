@@ -10,10 +10,17 @@ $color_main: #5099EE;
   border: none;
   font-family: Montserrat, sans-serif;
 }
+input:focus-visible, select:focus-visible {
+  outline: none;
+}
+a {
+  text-decoration: none
+}
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  background-color: #bed5ff;
 }
 .page {
   width: 100vw;
@@ -24,5 +31,6 @@ $color_main: #5099EE;
   background-color: $color_main;
   padding: 0.8rem;
   border: 2px solid darken($color_main, 5);
+  cursor: pointer;
 }
 </style>

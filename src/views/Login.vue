@@ -1,29 +1,29 @@
 <template>
   <div>
     <form action="#" @submit.prevent="submit">
-        <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
+      <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
 
-          <input
-            id="email"
-            type="email"
-            class="form-control"
-            name="email"
-            value
-            required
-            autofocus
-            v-model="form.email"
-          />
+      <input
+        id="email"
+        type="email"
+        class="form-control"
+        name="email"
+        value
+        required
+        autofocus
+        v-model="form.email"
+      />
 
-        <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
+      <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
 
-          <input
-            id="password"
-            type="password"
-            class="form-control"
-            name="password"
-            required
-            v-model="form.password"
-          />
+      <input
+        id="password"
+        type="password"
+        class="form-control"
+        name="password"
+        required
+        v-model="form.password"
+      />
 
       <button type="submit" class="btn btn-primary">Login</button>
 
@@ -35,10 +35,10 @@
 import { Options, Vue } from 'vue-class-component';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
-interface Form{
-  name : string,
-  email:string,
-  password:string,
+interface Form {
+  name: string,
+  email: string,
+  password: string,
 }
 
 @Options({
@@ -51,13 +51,13 @@ export default class Login extends Vue {
   // PROPS
   // -----------------------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------------------
-  form : Form = {
+  form: Form = {
     name: '',
     email: '',
     password: '',
   };
 
-  error = ''
+  error = '';
 
   // ***********************************************************************************************
   // VARIABLES
@@ -69,12 +69,12 @@ export default class Login extends Vue {
   // -----------------------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------------------
 
-  public submit() {
+  submit(): void {
     signInWithEmailAndPassword(getAuth(), this.form.email, this.form.password)
       .then(() => {
         this.$router.replace('/');
       })
-      .catch((err) => {
+      .catch((err: { message: string; }) => {
         this.error = err.message;
       });
   }
