@@ -3,13 +3,13 @@ import {
 } from 'firebase/firestore';
 import * as firebase from 'firebase/app';
 
-interface Article{
+export interface Article{
   Description: string,
   Sauveteurs: string,
   Titre: string,
 }
 
-interface Pending{
+export interface Pending{
   Description: string,
   Sauveteurs: string,
   Titre: string,
@@ -31,7 +31,7 @@ firebase.initializeApp(firebaseConfig);
 
 const db = getFirestore();
 
-async function getAllPending() {
+export async function getAllPending() {
   const q = query(collection(db, 'Pending'));
   const querySnapshot = await getDocs(q);
   const myList: Pending[] = [];
@@ -50,7 +50,7 @@ async function getAllPending() {
   return myList;
 }
 
-async function getAllArticle() {
+export async function getAllArticle() {
   const q = query(collection(db, 'Articles'));
   const querySnapshot = await getDocs(q);
   const myList: Article[] = [];
@@ -66,7 +66,7 @@ async function getAllArticle() {
   return myList;
 }
 
-async function getArticle(id: string) {
+export async function getArticle(id: string) {
   const docRef = doc(db, 'Articles', id);
   const docSnap = await getDoc(docRef);
   if (docSnap?.exists()) {
@@ -80,7 +80,7 @@ async function getArticle(id: string) {
   }
 }
 
-async function getPending(id: string) {
+export async function getPending(id: string) {
   const docRef = doc(db, 'Pending', id);
   const docSnap = await getDoc(docRef);
   if (docSnap?.exists()) {
@@ -98,7 +98,7 @@ async function getPending(id: string) {
   return null;
 }
 
-async function updateArticle(id:string, newArticle:Article) {
+export async function updateArticle(id:string, newArticle:Article) {
   const docRef = doc(db, 'Articles', id);
   await updateDoc(docRef, {
     Description: newArticle.Description,
@@ -107,15 +107,15 @@ async function updateArticle(id:string, newArticle:Article) {
   });
 }
 
-async function deleteArticle(id:string) {
+export async function deleteArticle(id:string) {
   await deleteDoc(doc(db, 'Articles', id));
 }
 
-async function deletePending(id:string) {
+export async function deletePending(id:string) {
   await deleteDoc(doc(db, 'Pending', id));
 }
 
-async function addArticle(nArticle:Article) {
+export async function addArticle(nArticle:Article) {
   const docRef = await addDoc(collection(db, 'Articles'), {
     Description: nArticle.Description,
     Titre: nArticle.Titre,
@@ -125,7 +125,7 @@ async function addArticle(nArticle:Article) {
   return docRef.id;
 }
 
-async function addPending(nPending:Pending) {
+export async function addPending(nPending:Pending) {
   const docRef = await addDoc(collection(db, 'Pending'), {
     Description: nPending.Description,
     Sauveteurs: nPending.Sauveteurs,
@@ -137,5 +137,3 @@ async function addPending(nPending:Pending) {
   console.log('Document written with ID: ', docRef.id);
   return docRef.id;
 }
-
-export { getAllPending, getPending };
