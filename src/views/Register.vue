@@ -15,7 +15,7 @@
         v-model="form.name"
       />
 
-      <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
+      <label for="email">Email</label>
 
       <input
         id="email"
@@ -28,7 +28,7 @@
         v-model="form.email"
       />
 
-      <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
+      <label for="password">Password</label>
 
       <input
         id="password"
@@ -39,7 +39,7 @@
         v-model="form.password"
       />
 
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit">Login</button>
 
     </form>
   </div>

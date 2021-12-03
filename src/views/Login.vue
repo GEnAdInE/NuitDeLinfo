@@ -67,7 +67,7 @@ export default class Login extends Vue {
   // -----------------------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------------------
 
-  public submit() {
+  submit() {
     signInWithEmailAndPassword(getAuth(), this.form.email, this.form.password)
       .then(() => {
         this.$router.replace('/');
