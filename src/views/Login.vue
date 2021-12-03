@@ -25,7 +25,8 @@
             v-model="form.password"
           />
 
-      <button type="submit">Login</button>
+      <button @click="Basic">Basic Login</button>
+      <button @click="Google">Login With google</button>
 
     </form>
   </div>
@@ -34,6 +35,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { LoginMode, OtherLogin } from '@/utils/FirebaseInterface';
 
 interface Form{
   email:string,
@@ -66,15 +68,26 @@ export default class Login extends Vue {
   // FONCTIONS
   // -----------------------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------------------
+  Basic() {
+    this.submit(LoginMode.Basic);
+  }
 
-  submit() {
-    signInWithEmailAndPassword(getAuth(), this.form.email, this.form.password)
-      .then(() => {
-        this.$router.replace('/');
-      })
-      .catch((err) => {
-        this.error = err.message;
-      });
+  Google() {
+    this.submit(LoginMode.Google);
+  }
+
+  submit(types : LoginMode) {
+    if (LoginMode.Basic === types) {
+      signInWithEmailAndPassword(getAuth(), this.form.email, this.form.password)
+        .then(() => {
+          this.$router.replace('/');
+        })
+        .catch((err) => {
+          this.error = err.message;
+        });
+    } else {
+      OtherLogin(types);
+    }
   }
 }
 </script>

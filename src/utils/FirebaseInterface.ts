@@ -4,7 +4,7 @@ import {
 import * as firebase from 'firebase/app';
 import {
   getAuth, GoogleAuthProvider, TwitterAuthProvider, GithubAuthProvider, signInWithPopup,
-  AuthProvider,
+  signInWithRedirect, getRedirectResult,
 } from 'firebase/auth';
 
 export interface Article{
@@ -189,33 +189,24 @@ export async function IsUserAdmin() {
 
 export async function OtherLogin(types : LoginMode) {
   let provider = new GoogleAuthProvider();
-  switch (types) {
-    case LoginMode.GitHub:
-      provider = new GithubAuthProvider();
-      break;
-    case LoginMode.Google:
-      provider = new GoogleAuthProvider();
-      break;
-    case LoginMode.Twitter:
-      provider = new TwitterAuthProvider();
-      break;
-    default:
-      return;
-      break;
-  }
-  signInWithPopup(auth, provider).then(async (result) => {
-    const { user } = result;
-    console.log(user); // User that was authenticated
-    const docRef = doc(db, 'Users', user.uid);
-    const docSnap = await getDoc(docRef);
-    if (!docSnap?.exists()) {
-      await setDoc(doc(db, 'Users', user.uid), {
-        Name: user.displayName,
-        IsAdmin: false,
+  if (types === LoginMode.Google) {
+    provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider).then(async (result) => {
+      const { user } = result;
+      console.log(user); // User that was authenticated
+      const docRef = doc(db, 'Users', user.uid);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap?.exists()) {
+        await setDoc(doc(db, 'Users', user.uid), {
+          Name: user.displayName,
+          IsAdmin: false,
+        });
+      }
+    })
+      .catch((err) => {
+        console.log(err);
       });
-    }
-  })
-    .catch((err) => {
-      console.log(err); // This will give you all the information needed to further debug any errors
-    });
+  } else {
+    console.error('Not implemented');
+  }
 }
