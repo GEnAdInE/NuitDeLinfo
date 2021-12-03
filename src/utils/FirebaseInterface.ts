@@ -1,10 +1,14 @@
 import {
-  doc, query, collection, getDocs, getFirestore, getDoc, updateDoc, deleteDoc, addDoc,
+  doc, query, collection, getDocs, getFirestore, getDoc, updateDoc, deleteDoc, addDoc, setDoc,
 } from 'firebase/firestore';
 import * as firebase from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import {
+  getAuth, GoogleAuthProvider, TwitterAuthProvider, GithubAuthProvider, signInWithPopup,
+  AuthProvider,
+} from 'firebase/auth';
 
 export interface Article{
+  ID: string,
   Description: string,
   Sauveteurs: string,
   Titre: string,
@@ -24,6 +28,14 @@ export interface User{
   Name: string,
 }
 
+// eslint-disable-next-line no-shadow
+export enum LoginMode{
+  Twitter = 0,
+  Google=1,
+  GitHub = 2,
+  Basic = 3,
+}
+
 const firebaseConfig = {
   apiKey: 'AIzaSyAUgICpXRIYAmDY43GcRl2e0NoPkAqnK5Y',
   authDomain: 'snsm-e12d3.firebaseapp.com',
@@ -36,6 +48,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = getFirestore();
+const auth = getAuth();
+
+const providerGoogle = new GoogleAuthProvider();
+const providerTwitter = new TwitterAuthProvider();
+const providerGit = new GithubAuthProvider();
 
 export async function getAllPending() {
   const q = query(collection(db, 'Pending'));
@@ -63,6 +80,7 @@ export async function getAllArticle() {
   // eslint-disable-next-line no-shadow
   querySnapshot.forEach((doc) => {
     const myArticle : Article = {
+      ID: doc.id,
       Description: doc.data().Description,
       Sauveteurs: doc.data().Sauveteurs,
       Titre: doc.data().Titre,
@@ -77,6 +95,7 @@ export async function getArticle(id: string) {
   const docSnap = await getDoc(docRef);
   if (docSnap?.exists()) {
     const article : Article = {
+      ID: id,
       Description: docSnap.data().Description,
       Sauveteurs: docSnap.data().Sauveteurs,
       Titre: docSnap.data().Titre,
@@ -165,4 +184,37 @@ export async function IsUserAdmin() {
   } else {
     return false;
   }
+}
+
+export async function OtherLogin(types : LoginMode) {
+  let provider = new GoogleAuthProvider();
+  switch (types) {
+    case LoginMode.GitHub:
+      provider = new GithubAuthProvider();
+      break;
+    case LoginMode.Google:
+      provider = new GoogleAuthProvider();
+      break;
+    case LoginMode.Twitter:
+      provider = new TwitterAuthProvider();
+      break;
+    default:
+      return;
+      break;
+  }
+  signInWithPopup(auth, provider).then(async (result) => {
+    const { user } = result;
+    console.log(user); // User that was authenticated
+    const docRef = doc(db, 'Users', user.uid);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap?.exists()) {
+      await setDoc(doc(db, 'Users', user.uid), {
+        Name: user.displayName,
+        IsAdmin: false,
+      });
+    }
+  })
+    .catch((err) => {
+      console.log(err); // This will give you all the information needed to further debug any errors
+    });
 }
