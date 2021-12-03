@@ -2,6 +2,7 @@ import {
   doc, query, collection, getDocs, getFirestore, getDoc, updateDoc, deleteDoc, addDoc,
 } from 'firebase/firestore';
 import * as firebase from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 export interface Article{
   Description: string,
@@ -16,6 +17,11 @@ export interface Pending{
   ID: string,
   IsNewArticle: boolean,
   Date: Date,
+}
+
+export interface User{
+  IsAdmin: boolean,
+  Name: string,
 }
 
 const firebaseConfig = {
@@ -136,4 +142,27 @@ export async function addPending(nPending:Pending) {
   });
   console.log('Document written with ID: ', docRef.id);
   return docRef.id;
+}
+
+export function IsUserLogin() {
+  const { currentUser } = getAuth();
+  return currentUser != null;
+}
+
+export async function IsUserAdmin() {
+  if (IsUserLogin()) {
+    const uid : string = <string>getAuth().currentUser?.uid;
+    const docRef = doc(db, 'Users', uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap?.exists()) {
+      const user: User = {
+        IsAdmin: docSnap.data().IsAdmin,
+        Name: docSnap.data().Name,
+      };
+      console.log(user.IsAdmin);
+      return user.IsAdmin;
+    }
+  } else {
+    return false;
+  }
 }
