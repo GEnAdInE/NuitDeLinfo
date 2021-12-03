@@ -3,6 +3,7 @@ import Home from '../views/Home.vue';
 import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
 import ArticleViewer from '@/views/ArticleViewer.vue';
+import Admin from '@/views/Admin.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -24,6 +25,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/article/:articleID',
     component: ArticleViewer,
     props: true,
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
   },
 ];
 
