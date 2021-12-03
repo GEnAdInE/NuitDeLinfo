@@ -24,8 +24,9 @@
             v-model="form.password"
           />
 
+      <input class="button__primary login__form-button" @click="google"
+             value="Connexion avec Google"/>
       <input class="button__primary login__form-button" type="submit" value="Se connecter"/>
-
     </form>
   </div>
 </template>
@@ -33,6 +34,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { LoginMode, OtherLogin } from '@/utils/FirebaseInterface';
 
 interface Form{
   email:string,
@@ -75,6 +77,12 @@ export default class Login extends Vue {
         this.error = err.message;
       });
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  async google(): Promise<void> {
+    await OtherLogin(LoginMode.Google);
+    await this.$router.push('/');
+  }
 }
 </script>
 
@@ -113,6 +121,7 @@ export default class Login extends Vue {
 .login__form-button {
   padding: .3rem;
   color: white;
+  margin-bottom: 10px;
 }
 // -----------------------------------------------------------------------------------------------
 </style>
