@@ -10,6 +10,9 @@ $color_main: #5099EE;
   border: none;
   font-family: Montserrat, sans-serif;
 }
+body {
+  overflow: hidden;
+}
 input:focus-visible, select:focus-visible {
   outline: none;
 }
@@ -32,5 +35,10 @@ a {
   padding: 0.8rem;
   border: 2px solid darken($color_main, 5);
   cursor: pointer;
+}
+.label {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 5px;
 }
 </style>

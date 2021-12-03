@@ -164,9 +164,9 @@ export async function addPending(nPending:Pending) {
   return docRef.id;
 }
 
-export function IsUserLogin() {
+export function IsUserLogin(): boolean {
   const { currentUser } = getAuth();
-  return currentUser != null;
+  return currentUser !== null;
 }
 
 export async function IsUserAdmin() {

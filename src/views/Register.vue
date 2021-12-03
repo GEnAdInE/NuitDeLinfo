@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <form action="#" @submit.prevent="submit">
+  <div class="page register">
+    <form class="register__form" action="#" @submit.prevent="submit">
 
-      <label for="name">Name</label>
+      <label class="label" for="name">Name</label>
 
       <input
         id="name"
-        type="name"
-        class="form-control"
+        type="text"
+        class="register__form-input"
         name="name"
         value
         required
@@ -15,12 +15,12 @@
         v-model="form.name"
       />
 
-      <label for="email">Email</label>
+      <label class="label" for="email">Email</label>
 
       <input
         id="email"
         type="email"
-        class="form-control"
+        class="register__form-input"
         name="email"
         value
         required
@@ -28,18 +28,18 @@
         v-model="form.email"
       />
 
-      <label for="password">Password</label>
+      <label class="label" for="password">Password</label>
 
       <input
         id="password"
         type="password"
-        class="form-control"
+        class="register__form-input"
         name="password"
         required
         v-model="form.password"
       />
 
-      <button type="submit">Login</button>
+      <input class="button__primary register__form-button" type="submit" value="Créer un compte"/>
 
     </form>
   </div>
@@ -85,7 +85,7 @@ export default class Register extends Vue {
   // FONCTIONS
   // -----------------------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------------------
-  submit() {
+  submit(): void {
     createUserWithEmailAndPassword(getAuth(), this.form.email, this.form.password)
       .then(async (data) => {
         await updateProfile(data.user, { displayName: this.form.name });
@@ -93,6 +93,7 @@ export default class Register extends Vue {
           Name: this.form.name,
           IsAdmin: false,
         });
+        await this.$router.push('/');
       })
       .catch((err) => {
         this.error = err.message;
@@ -115,5 +116,27 @@ export default class Register extends Vue {
 // ***********************************************************************************************
 // CLASSES
 // -----------------------------------------------------------------------------------------------
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.register__form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  padding: 1rem;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+.register__form-input {
+  padding: .5rem;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+.register__form-button {
+  padding: .3rem;
+  color: white;
+}
 // -----------------------------------------------------------------------------------------------
 </style>

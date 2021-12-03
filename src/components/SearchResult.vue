@@ -1,60 +1,25 @@
 <template>
-  <div class="page login">
-    <form class="login__form" action="#" @submit.prevent="submit">
-        <label class="label" for="email">Adresse email</label>
-
-          <input
-            id="email"
-            type="email"
-            name="email"
-            class="login__form-input"
-            required
-            autofocus
-            v-model="form.email"
-          />
-
-        <label class="label" for="password">Mot de passe</label>
-
-          <input
-            id="password"
-            type="password"
-            name="password"
-            class="login__form-input"
-            required
-            v-model="form.password"
-          />
-
-      <input class="button__primary login__form-button" type="submit" value="Se connecter"/>
-
-    </form>
+  <div @click="load" class="search-result__container">
+    <h2 class="search-result__title">{{ article.Titre }}</h2>
+    <div class="search-result__informations">{{ article.Description }}</div>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-
-interface Form{
-  email:string,
-  password:string,
-}
+import { Article } from '@/utils/FirebaseInterface';
 
 @Options({
-  name: 'Login',
-  props: {},
+  name: 'SearchResult',
+  props: { article: Object as () => Article },
   components: {},
 })
-export default class Login extends Vue {
+export default class SearchResult extends Vue {
   // ***********************************************************************************************
   // PROPS
   // -----------------------------------------------------------------------------------------------
+  article!: Article
   // -----------------------------------------------------------------------------------------------
-  form : Form = {
-    email: '',
-    password: '',
-  };
-
-  error = ''
 
   // ***********************************************************************************************
   // VARIABLES
@@ -64,17 +29,10 @@ export default class Login extends Vue {
   // ***********************************************************************************************
   // FONCTIONS
   // -----------------------------------------------------------------------------------------------
-  // -----------------------------------------------------------------------------------------------
-
-  submit():void {
-    signInWithEmailAndPassword(getAuth(), this.form.email, this.form.password)
-      .then(() => {
-        this.$router.replace('/');
-      })
-      .catch((err) => {
-        this.error = err.message;
-      });
+  load(): void {
+    this.$router.push(`/article/${this.article.ID}`);
   }
+  // -----------------------------------------------------------------------------------------------
 }
 </script>
 
@@ -92,27 +50,25 @@ export default class Login extends Vue {
 // ***********************************************************************************************
 // CLASSES
 // -----------------------------------------------------------------------------------------------
-.login {
+.search-result__container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.login__form {
-  display: flex;
-  flex-direction: column;
-  max-width: 400px;
-  padding: 1rem;
+  position: relative;
   justify-content: flex-start;
-  align-items: flex-end;
-}
-.login__form-input {
-  padding: .5rem;
+  align-items: center;
   border-radius: 15px;
-  margin-bottom: 10px;
+  background-color: rgba(0, 255, 255, 0.8);
+  width: calc(100% - 2rem);
+  padding: 1rem;
+  gap: 1rem;
+  cursor: pointer;
 }
-.login__form-button {
-  padding: .3rem;
-  color: white;
+.search-result__title {
+  font-size: 0.9rem;
+  width: 25%;
+  text-align: left;
+}
+.search-result__informations {
+  font-size: 0.8rem;
 }
 // -----------------------------------------------------------------------------------------------
 </style>
