@@ -1,5 +1,6 @@
 import {
   doc, query, collection, getDocs, getFirestore, getDoc, updateDoc, deleteDoc, addDoc, setDoc,
+  where,
 } from 'firebase/firestore';
 import * as firebase from 'firebase/app';
 import {
@@ -185,6 +186,42 @@ export async function IsUserAdmin() {
   } else {
     return false;
   }
+}
+
+export async function SearchBoat(boatName:string) {
+  const col = collection(db, 'Articles');
+  const q = query(col, where('Titre', '==', boatName));
+  const querySnapshot = await getDocs(q);
+  const myList: Article[] = [];
+  // eslint-disable-next-line no-shadow
+  querySnapshot.forEach((doc) => {
+    const myArticle : Article = {
+      ID: doc.id,
+      Description: doc.data().Description,
+      Sauveteurs: doc.data().Sauveteurs,
+      Titre: doc.data().Titre,
+    };
+    myList.push(myArticle);
+  });
+  return myList;
+}
+
+export async function SearchSauveteur(sauveteurName:string) {
+  const col = collection(db, 'Articles');
+  const q = query(col, where('Sauveteurs', '==', sauveteurName));
+  const querySnapshot = await getDocs(q);
+  const myList: Article[] = [];
+  // eslint-disable-next-line no-shadow
+  querySnapshot.forEach((doc) => {
+    const myArticle : Article = {
+      ID: doc.id,
+      Description: doc.data().Description,
+      Sauveteurs: doc.data().Sauveteurs,
+      Titre: doc.data().Titre,
+    };
+    myList.push(myArticle);
+  });
+  return myList;
 }
 
 export async function OtherLogin(types : LoginMode) {
