@@ -100,9 +100,10 @@ export async function getArticle(id: string) {
       Sauveteurs: docSnap.data().Sauveteurs,
       Titre: docSnap.data().Titre,
     };
-  } else {
-    console.log('No such document!');
+    return article;
   }
+  console.log('No such document!');
+  return null;
 }
 
 export async function getPending(id: string) {
