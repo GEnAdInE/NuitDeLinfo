@@ -2,7 +2,9 @@
   <div class="navbar">
     <a v-if="!logged" href="/register" class="button__primary navbar__button">Créer un compte</a>
     <a v-if="!logged" href="/login" class="button__primary navbar__button">Se connecter</a>
-    <a v-if="logged">Connecté !</a>
+    <a v-if="logged && admin" href="/admin"
+       class="button__primary navbar__button">Page administrateur</a>
+    <a v-if="logged" class="navbar__info">Connecté !</a>
   </div>
 </template>
 
@@ -11,7 +13,7 @@ import { Options, Vue } from 'vue-class-component';
 
 @Options({
   name: 'Navbar',
-  props: { logged: Boolean },
+  props: { logged: Boolean, admin: Boolean },
   components: {},
 })
 export default class Navbar extends Vue {
@@ -19,6 +21,8 @@ export default class Navbar extends Vue {
   // PROPS
   // -----------------------------------------------------------------------------------------------
   logged!: boolean
+
+  admin!: boolean
   // -----------------------------------------------------------------------------------------------
 
   // ***********************************************************************************************
@@ -66,6 +70,10 @@ export default class Navbar extends Vue {
   &:last-of-type {
     margin-right: 1rem;
   }
+}
+.navbar__info {
+  margin-right: 10px;
+  margin-top: 10px;
 }
 // -----------------------------------------------------------------------------------------------
 </style>

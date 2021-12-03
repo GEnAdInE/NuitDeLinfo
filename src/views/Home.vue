@@ -1,7 +1,7 @@
 <template>
   <div class="page home">
     <video class="home__background" src="videos/sea.webm" muted loop autoplay></video>
-    <Navbar :logged="userLogged"></Navbar>
+    <Navbar :logged="userLogged" :admin="userAdmin"></Navbar>
     <div v-if="!resultMode" class="home__search">
       <input v-model="searchedName" type="text"
              class="home__search__bar" placeholder="Martin Matin">
@@ -38,7 +38,9 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Navbar from '@/components/Navbar.vue';
-import { Article, getAllArticle, IsUserLogin } from '@/utils/FirebaseInterface';
+import {
+  Article, getAllArticle, IsUserAdmin, IsUserLogin,
+} from '@/utils/FirebaseInterface';
 import SearchResult from '@/components/SearchResult.vue';
 
 @Options({
@@ -60,8 +62,17 @@ export default class Home extends Vue {
 
   userLogged = false;
 
+  userAdmin = false;
+
   mounted():void {
     this.userLogged = IsUserLogin();
+    IsUserAdmin().then((result: boolean | undefined) => {
+      if (result) {
+        this.userAdmin = true;
+      } else {
+        this.userAdmin = false;
+      }
+    });
   }
 
   async search(): Promise<void> {

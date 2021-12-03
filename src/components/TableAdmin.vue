@@ -10,7 +10,7 @@
       <tr v-bind:key="pending" v-for="pending in pendings" class="tableadmin__tr">
         <td :class="'tableadmin__td '+pending.IsNewArticle?'__false':'__true'"></td>
         <td class="tableadmin__td">
-          <a v-bind:href="'/annonce/'+pending.ID">{{pending.Titre}}</a>
+          <a v-bind:href="'/article/'+pending.ID">{{pending.Titre}}</a>
         </td>
         <td class="tableadmin__td">{{pending.Date}}</td>
         <td class="tableadmin__td">{{pending.Sauveteurs}}</td>
@@ -80,7 +80,7 @@ db = getFirestore();
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  padding-top: 50px;
 }
 
 .tableadmin__table{
